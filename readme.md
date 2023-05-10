@@ -16,3 +16,9 @@ sqlAdministratorLoginPassword= `
 --debug
 
 ```
+
+## Reference Material
+
+<https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started>
+
+<https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-analyze-spark>
