@@ -5,6 +5,9 @@ param synapseWorkspaceName string
 
 param storageAccountName string 
 
+@description('Tags')
+param tags object
+
 @secure()
 param sqlAdministratorLogin string
 
@@ -15,7 +18,7 @@ var preventDataExfiltration = false
 
 var managedVirtualNetwork = 'default'
 
-var dataLakeStorageAccountUrlSuffix = '.dfs.core.windows.net'
+var dataLakeStorageAccountUrlSuffix = '.dfs.${environment().suffixes.storage}'
 
 var dataLakeStorageAccountUrl = 'https://${toLower(storageAccountName)}${dataLakeStorageAccountUrlSuffix}'
 
@@ -26,6 +29,7 @@ var managedVnetSettings = {
 
 resource workspaces 'Microsoft.Synapse/workspaces@2021-03-01' = {
   name: toLower(synapseWorkspaceName)
+  tags: tags
   location: location
   identity: {
     type: 'SystemAssigned'

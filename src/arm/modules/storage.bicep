@@ -4,6 +4,8 @@ param location string
 @description('The storage account name.')
 param storageAccountName string 
 
+@description('Tags')
+param tags object
 param storageAccessTier string = 'Hot'
 
 param storageIsHnsEnabled bool = true
@@ -14,6 +16,7 @@ var storageFilesystemName = 'jdpanalyticsdata'
 
 resource storageAccounts 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: toLower(storageAccountName)
+  tags: tags
   location: location
   properties: {
     accessTier: storageAccessTier
@@ -22,7 +25,7 @@ resource storageAccounts 'Microsoft.Storage/storageAccounts@2022-09-01' = {
     networkAcls: {
       virtualNetworkRules: []
       bypass: 'AzureServices'
-      defaultAction: 'Deny'
+      defaultAction: 'Allow'
     }
   }
   sku: {

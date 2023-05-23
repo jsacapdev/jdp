@@ -7,8 +7,12 @@ param synapseSubnetName string
 @description('.')
 param octet int
 
+@description('Tags')
+param tags object
+
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   name: vnetName
+  tags: tags
   location: location
   properties: {
     addressSpace: {
