@@ -14,6 +14,20 @@ param sqlAdministratorLogin string
 @secure()
 param sqlAdministratorLoginPassword string
 
+param sparkPoolName string = 'sparkpool'
+param sparkNodeCount string = '3'
+param sparkNodeSizeFamily string = 'MemoryOptimized'
+param sparkNodeSize string = 'Small'
+param sparkAutoScaleEnabled bool = false
+param sparkMinNodeCount int = 1
+param sparkMaxNodeCount int = 5
+param sparkAutoPauseEnabled bool = false
+param sparkAutoPauseDelayInMinutes int = 120
+param sparkVersion string = '2.4'
+param sparkConfigPropertiesFileName string = ''
+param sparkConfigPropertiesContent string = ''
+param sessionLevelPackagesEnabled bool = true
+
 var preventDataExfiltration = false
 
 var managedVirtualNetwork = 'default'
@@ -51,3 +65,31 @@ resource workspaces 'Microsoft.Synapse/workspaces@2021-03-01' = {
     managedVirtualNetworkSettings: managedVnetSettings
   }
 }
+
+resource bigDataPools 'Microsoft.Synapse/workspaces/bigDataPools@2021-03-01' = {
+  parent: workspaces
+  name: sparkPoolName
+  location: location
+  tags: tags
+  properties: {
+    nodeCount: int(sparkNodeCount)
+    nodeSizeFamily: sparkNodeSizeFamily
+    nodeSize: sparkNodeSize
+    autoScale: {
+      enabled: sparkAutoScaleEnabled
+      minNodeCount: sparkMinNodeCount
+      maxNodeCount: sparkMaxNodeCount
+    }
+    autoPause: {
+      enabled: sparkAutoPauseEnabled
+      delayInMinutes: sparkAutoPauseDelayInMinutes
+    }
+    sparkVersion: sparkVersion
+    sparkConfigProperties: {
+      filename: sparkConfigPropertiesFileName
+      content: sparkConfigPropertiesContent
+    }
+    sessionLevelPackagesEnabled: sessionLevelPackagesEnabled
+  }
+}
+
